@@ -9,13 +9,21 @@
 import UIKit
 import SceneKit
 import ARKit
+import Anchorage
+import CoreLocation
 
-class ViewController: UIViewController, ARSCNViewDelegate {
+class ViewController: UIViewController, ARSCNViewDelegate, CLLocationManagerDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     
+    let altitudeLabel = UILabel()
+    let locationManager = CLLocationManager()
+    @IBOutlet var addButton: UIButton!
+    @IBOutlet var pathToClosest: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.startReceivingLocationChanges()
         
         // Set the view's delegate
         sceneView.delegate = self
@@ -28,6 +36,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Set the scene to the view
         sceneView.scene = scene
+        
+        self.altitudeLabel.text = "20"
+        self.altitudeLabel.textColor = UIColor.white
+        self.sceneView.addSubview(self.altitudeLabel)
+        
+        self.setupConstraints()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,23 +54,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.run(configuration)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        // Pause the view's session
-        sceneView.session.pause()
+    func setupConstraints() {
+        self.altitudeLabel.topAnchor == self.sceneView.topAnchor + 40
+        self.altitudeLabel.leadingAnchor == self.sceneView.leadingAnchor + 40
     }
-
-    // MARK: - ARSCNViewDelegate
-    
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
-    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let node = SCNNode()
-     
-        return node
-    }
-*/
     
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
@@ -70,6 +71,34 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     func sessionInterruptionEnded(_ session: ARSession) {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
+        
+    }
+    
+    // Location Data
+    func startReceivingLocationChanges() {
+        let authorizationStatus = CLLocationManager.authorizationStatus()
+        if authorizationStatus != .authorizedWhenInUse && authorizationStatus != .authorizedAlways {
+            // User has not authorized access to location information.
+            return
+        }
+        // Do not start services that aren't available.
+        if !CLLocationManager.locationServicesEnabled() {
+            // Location services is not available.
+            return
+        }
+        // Configure and start the service.
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        locationManager.distanceFilter = 100.0  // In meters.
+        locationManager.delegate = self
+        locationManager.startUpdatingLocation()
+    }
+    
+    func locationManager(_ manager: CLLocationManager,  didUpdateLocations locations: [CLLocation]) {
+        let lastLocation = locations.last!
+        self.altitudeLabel.text = "\(lastLocation.altitude)"
+    }
+    
+    @IBAction func addPressed() {
         
     }
 }
