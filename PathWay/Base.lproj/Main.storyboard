@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="NF4-3h-Zpl">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yCy-he-a4q">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -42,13 +43,32 @@
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="19"/>
                                         <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <action selector="mark" destination="BV1-FR-VrT" eventType="editingDidEnd" id="kO2-aV-r1X"/>
+                                        </connections>
                                     </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yRH-Ya-iMA">
+                                        <rect key="frame" x="346" y="14" width="32" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="32" id="01E-pl-Evb"/>
+                                            <constraint firstAttribute="height" constant="30" id="Kkl-qd-UsO"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="GujaratiSangamMN-Bold" family="Gujarati Sangam MN" pointSize="36"/>
+                                        <state key="normal" title="+">
+                                            <color key="titleColor" red="0.2470588235" green="0.67450980390000004" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="mark" destination="BV1-FR-VrT" eventType="touchUpInside" id="Gyo-Ak-rUk"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.72549019609999998" green="0.7725490196" blue="0.83529411760000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="lWt-uT-oGU" secondAttribute="trailing" constant="20" id="DC8-PO-Su3"/>
                                     <constraint firstItem="YSV-jZ-zwT" firstAttribute="leading" secondItem="Ude-pf-xss" secondAttribute="leading" constant="20" id="IHF-Dm-Lc2"/>
+                                    <constraint firstItem="yRH-Ya-iMA" firstAttribute="top" secondItem="Ude-pf-xss" secondAttribute="top" constant="14" id="TQL-fK-rHj"/>
                                     <constraint firstItem="lWt-uT-oGU" firstAttribute="leading" secondItem="YSV-jZ-zwT" secondAttribute="trailing" constant="10" id="Vai-P7-vsj"/>
+                                    <constraint firstAttribute="trailing" secondItem="yRH-Ya-iMA" secondAttribute="trailing" constant="-3" id="WUd-pu-Dr1"/>
                                     <constraint firstItem="YSV-jZ-zwT" firstAttribute="centerY" secondItem="Ude-pf-xss" secondAttribute="centerY" id="Y7F-qe-rDL"/>
                                     <constraint firstItem="lWt-uT-oGU" firstAttribute="centerY" secondItem="Ude-pf-xss" secondAttribute="centerY" id="fzc-Sm-vlR"/>
                                     <constraint firstAttribute="height" constant="58" id="xka-NZ-gnq"/>
@@ -96,6 +116,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ojc-Vg-H8E" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="124.58770614692655"/>
+        </scene>
+        <!--Test View Controller-->
+        <scene sceneID="adI-Rz-Umx">
+            <objects>
+                <viewController id="yCy-he-a4q" customClass="TestViewController" customModule="PathWay" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="OAh-OB-J64">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="YBp-Hn-1a1"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Cyr-Wc-ZTe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="252" y="831"/>
         </scene>
     </scenes>
 </document>

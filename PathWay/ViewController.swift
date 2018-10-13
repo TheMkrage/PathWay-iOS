@@ -12,19 +12,26 @@ import ARKit
 import Anchorage
 import CoreLocation
 
+import ARCL
+
 class ViewController: UIViewController, ARSCNViewDelegate, CLLocationManagerDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     
-    let altitudeLabel = UILabel()
+    let locationLabel = UILabel()
     let locationManager = CLLocationManager()
     @IBOutlet var addButton: UIButton!
     @IBOutlet var pathToClosest: UITextField!
+    
+    var marked = CLLocation(latitude: 32.8855781716564785, longitude: -117.23935240809809)
+    var lastLocation = CLLocation(latitude: 32.8855781716564785, longitude: -117.23935240809809)
     
     let waypointTypes = ["Bathroom", "Exit", "Health Office", "Fire Alarm", "Stairs", "Elevators", "Ramps"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.present(TestViewController(), animated: true, completion: nil)
+        return
         self.startReceivingLocationChanges()
         
         // Set the view's delegate
@@ -39,8 +46,24 @@ class ViewController: UIViewController, ARSCNViewDelegate, CLLocationManagerDele
         // Set the scene to the view
         sceneView.scene = scene
         
-        self.altitudeLabel.text = "20"
-        self.altitudeLabel.textColor = UIColor.white
+        // Add a boxs
+        
+        let box = SCNBox(width: 0.2, height: 0.2, length: 0.2, chamferRadius: 0)
+        
+        let material = SCNMaterial()
+        
+        //This is not working
+        material.diffuse.contents = UIImage(named: "Icon.png")
+        
+        let node = SCNNode()
+        node.geometry = box
+        node.geometry?.materials = [material]
+        node.position = SCNVector3(0, 0.75, 0)
+        scene.rootNode.addChildNode(node)
+        
+        self.locationLabel.text = "20"
+        self.locationLabel.textColor = UIColor.white
+        self.locationLabel.numberOfLines = 0
         
         self.pathToClosest.delegate = self
         let inputView = UIPickerView()
@@ -48,7 +71,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, CLLocationManagerDele
         inputView.dataSource = self
         self.pathToClosest.inputView = inputView
         
-        self.sceneView.addSubview(self.altitudeLabel)
+        self.sceneView.addSubview(self.locationLabel)
         
         self.setupConstraints()
     }
@@ -64,47 +87,42 @@ class ViewController: UIViewController, ARSCNViewDelegate, CLLocationManagerDele
     }
     
     func setupConstraints() {
-        self.altitudeLabel.topAnchor == self.sceneView.topAnchor + 40
-        self.altitudeLabel.leadingAnchor == self.sceneView.leadingAnchor + 40
-    }
-    
-    func session(_ session: ARSession, didFailWithError error: Error) {
-        // Present an error message to the user
-        
-    }
-    
-    func sessionWasInterrupted(_ session: ARSession) {
-        // Inform the user that the session has been interrupted, for example, by presenting an overlay
-        
-    }
-    
-    func sessionInterruptionEnded(_ session: ARSession) {
-        // Reset tracking and/or remove existing anchors if consistent tracking is required
-        
+        self.locationLabel.topAnchor == self.sceneView.topAnchor + 40
+        self.locationLabel.leadingAnchor == self.sceneView.leadingAnchor + 40
     }
     
     // Location Data
     func startReceivingLocationChanges() {
-        let authorizationStatus = CLLocationManager.authorizationStatus()
-        if authorizationStatus != .authorizedWhenInUse && authorizationStatus != .authorizedAlways {
-            // User has not authorized access to location information.
-            return
-        }
-        // Do not start services that aren't available.
-        if !CLLocationManager.locationServicesEnabled() {
-            // Location services is not available.
-            return
-        }
         // Configure and start the service.
-        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        locationManager.distanceFilter = 100.0  // In meters.
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.delegate = self
+        locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
     }
     
-    func locationManager(_ manager: CLLocationManager,  didUpdateLocations locations: [CLLocation]) {
-        let lastLocation = locations.last!
-        self.altitudeLabel.text = "\(lastLocation.altitude)"
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        self.lastLocation = locations.last!
+        let metersAway = lastLocation.distance(from: marked)
+        print("\(lastLocation.coordinate)")
+        self.locationLabel.text = "lat: \(lastLocation.coordinate.latitude)\n long: \(lastLocation.coordinate.longitude)\n alt: \(lastLocation.altitude)\n dist: \(metersAway)"
+    }
+    
+    @IBAction func mark() {
+        self.marked = self.lastLocation
+        let box = SCNBox(width: 0.2, height: 0.2, length: 0.2, chamferRadius: 0)
+        
+        let material = SCNMaterial()
+        
+        //This is not working
+        material.diffuse.contents = UIImage(named: "Icon.png")
+        
+        let node = SCNNode()
+        node.geometry = box
+        node.geometry?.materials = [material]
+        node.position = SCNVector3(0, 0.75, 0)
+        self.sceneView.scene.rootNode.addChildNode(node)
+        
+        self.locationLabel.text = "marked"
     }
     
     @IBAction func addPressed() {
