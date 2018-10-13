@@ -16,10 +16,9 @@ import ARCL
 
 class ViewController: UIViewController, ARSCNViewDelegate, CLLocationManagerDelegate {
 
-    @IBOutlet var sceneView: ARSCNView!
+    @IBOutlet var sceneView: SceneLocationView!
     
     let locationLabel = UILabel()
-    let locationManager = CLLocationManager()
     @IBOutlet var addButton: UIButton!
     @IBOutlet var pathToClosest: UITextField!
     
@@ -30,36 +29,26 @@ class ViewController: UIViewController, ARSCNViewDelegate, CLLocationManagerDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.present(TestViewController(), animated: true, completion: nil)
-        return
-        self.startReceivingLocationChanges()
-        
-        // Set the view's delegate
-        sceneView.delegate = self
+    
+        self.sceneView.run()
         
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
         
-        // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        let coordinate = CLLocationCoordinate2D(latitude: 32.8855781716564785, longitude: -117.23935240809809)
+        let location = CLLocation(coordinate: coordinate, altitude: 124)
+        let image = UIImage(named: "Icon-App-60x60")!
+        let annotationNode = LocationAnnotationNode(location: location, image: image)
+        sceneView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
+        print(sceneView.currentScenePosition())
         
-        // Set the scene to the view
-        sceneView.scene = scene
+        // Set the view's delegate
+        sceneView.delegate = self
+        sceneView.locationDelegate = self
         
-        // Add a boxs
-        
-        let box = SCNBox(width: 0.2, height: 0.2, length: 0.2, chamferRadius: 0)
-        
-        let material = SCNMaterial()
-        
-        //This is not working
-        material.diffuse.contents = UIImage(named: "Icon.png")
-        
-        let node = SCNNode()
-        node.geometry = box
-        node.geometry?.materials = [material]
-        node.position = SCNVector3(0, 0.75, 0)
-        scene.rootNode.addChildNode(node)
+        //self.sceneView.rendersContinuously = true
+        //self.sceneView.showAxesNode = true
+        //self.sceneView.showFeaturePoints = true
         
         self.locationLabel.text = "20"
         self.locationLabel.textColor = UIColor.white
@@ -91,38 +80,56 @@ class ViewController: UIViewController, ARSCNViewDelegate, CLLocationManagerDele
         self.locationLabel.leadingAnchor == self.sceneView.leadingAnchor + 40
     }
     
-    // Location Data
-    func startReceivingLocationChanges() {
-        // Configure and start the service.
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.delegate = self
-        locationManager.requestAlwaysAuthorization()
-        locationManager.startUpdatingLocation()
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        self.lastLocation = locations.last!
-        let metersAway = lastLocation.distance(from: marked)
-        print("\(lastLocation.coordinate)")
-        self.locationLabel.text = "lat: \(lastLocation.coordinate.latitude)\n long: \(lastLocation.coordinate.longitude)\n alt: \(lastLocation.altitude)\n dist: \(metersAway)"
-    }
-    
     @IBAction func mark() {
-        self.marked = self.lastLocation
-        let box = SCNBox(width: 0.2, height: 0.2, length: 0.2, chamferRadius: 0)
-        
-        let material = SCNMaterial()
-        
-        //This is not working
-        material.diffuse.contents = UIImage(named: "Icon.png")
-        
-        let node = SCNNode()
-        node.geometry = box
-        node.geometry?.materials = [material]
-        node.position = SCNVector3(0, 0.75, 0)
-        self.sceneView.scene.rootNode.addChildNode(node)
+        self.marked = self.sceneView.currentLocation()!
+        DispatchQueue.main.async {
+            let box = SCNBox(width: 0.2, height: 0.2, length: 0.2, chamferRadius: 0)
+            
+            let material = SCNMaterial()
+            
+            //This is not working
+            material.diffuse.contents = UIImage(named: "fire.png")
+            
+            let node = SCNNode()
+            node.geometry = box
+            node.geometry?.materials = [material]
+            
+            /*
+            
+            let referenceNode = self.sceneView.pointOfView!
+            let position = SCNVector3(x: 0, y: 0.75, z: 0)
+            let referenceNodeTransform = matrix_float4x4(referenceNode.transform)
+            
+            // Setup a translation matrix with the desired position
+            var translationMatrix = matrix_identity_float4x4
+            translationMatrix.columns.3.x = position.x
+            translationMatrix.columns.3.y = position.y
+            translationMatrix.columns.3.z = position.z
+            
+            // Combine the configured translation matrix with the referenceNode's transform to get the desired position AND orientation
+            let updatedTransform = matrix_multiply(referenceNodeTransform, translationMatrix)
+            print(updatedTransform)
+            node.transform = SCNMatrix4(updatedTransform)
+            self.sceneView.scene.rootNode.addChildNode(node)
+
+            let frame = self.sceneView.session.currentFrame!
+            let currentTransform = frame.camera.transform
+            node.transform = SCNMatrix4(matrix_multiply(currentTransform, translation))
+            self.sceneView.scene.rootNode.addChildNode(node) */
+            let coordinate = self.marked.coordinate
+            print(coordinate)
+            let location = CLLocation(coordinate: coordinate, altitude: 124)
+            let image = UIImage(named: "fire.png")!
+            let annotationNode = LocationAnnotationNode(location: location, image: image)
+            self.sceneView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
+        }
         
         self.locationLabel.text = "marked"
+        
+        let currentLocation = self.sceneView.currentLocation()
+        let metersAway = lastLocation.distance(from: marked)
+        print("\(lastLocation.coordinate)")
+        self.locationLabel.text = "lat: \(currentLocation?.coordinate.latitude)\n long: \(currentLocation?.coordinate.longitude)\n alt: \(currentLocation?.altitude)\n dist: \(metersAway)"
     }
     
     @IBAction func addPressed() {
@@ -137,6 +144,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, CLLocationManagerDele
         }
         alert.addAction(action)
         self.present(alert, animated:true, completion: nil)
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        print("added")
+        return
+    }
+    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+        print(anchor)
+        return nil
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        print("udpdate")
     }
 }
 
@@ -163,5 +183,28 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         self.pathToClosest.text = "Path to Nearest \(self.waypointTypes[row])"
         self.view.endEditing(true)
+    }
+}
+
+extension ViewController: SceneLocationViewDelegate {
+    
+    func sceneLocationViewDidAddSceneLocationEstimate(sceneLocationView: SceneLocationView, position: SCNVector3, location: CLLocation) {
+        
+    }
+    
+    func sceneLocationViewDidRemoveSceneLocationEstimate(sceneLocationView: SceneLocationView, position: SCNVector3, location: CLLocation) {
+        
+    }
+    
+    func sceneLocationViewDidConfirmLocationOfNode(sceneLocationView: SceneLocationView, node: LocationNode) {
+        
+    }
+    
+    func sceneLocationViewDidSetupSceneNode(sceneLocationView: SceneLocationView, sceneNode: SCNNode) {
+        
+    }
+    
+    func sceneLocationViewDidUpdateLocationAndScaleOfLocationNode(sceneLocationView: SceneLocationView, locationNode: LocationNode) {
+        
     }
 }

@@ -13,6 +13,7 @@
 		7E1C42412171F38500805EFE /* money icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E1C42402171F38500805EFE /* money icon.png */; };
 		7E1C42432172482600805EFE /* Icon-App-29x29@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E1C42422172482600805EFE /* Icon-App-29x29@3x.png */; };
 		7E1C42452172482C00805EFE /* Icon-App-60x60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E1C42442172482C00805EFE /* Icon-App-60x60@3x.png */; };
+		7E1C4247217257D600805EFE /* fire.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E1C4246217257D600805EFE /* fire.png */; };
 		7E644A6321719B71009810FF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E644A6221719B71009810FF /* AppDelegate.swift */; };
 		7E644A6521719B71009810FF /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E644A6421719B71009810FF /* art.scnassets */; };
 		7E644A6721719B71009810FF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E644A6621719B71009810FF /* ViewController.swift */; };
@@ -36,6 +37,7 @@
 		7E1C42402171F38500805EFE /* money icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "money icon.png"; sourceTree = "<group>"; };
 		7E1C42422172482600805EFE /* Icon-App-29x29@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-App-29x29@3x.png"; sourceTree = "<group>"; };
 		7E1C42442172482C00805EFE /* Icon-App-60x60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-App-60x60@3x.png"; sourceTree = "<group>"; };
+		7E1C4246217257D600805EFE /* fire.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fire.png; sourceTree = "<group>"; };
 		7E644A5F21719B71009810FF /* PathWay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PathWay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E644A6221719B71009810FF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7E644A6421719B71009810FF /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				7E1C423E2171F0CD00805EFE /* TestViewController.swift */,
 				7E644A6821719B71009810FF /* Main.storyboard */,
 				7E644A6B21719B72009810FF /* Assets.xcassets */,
+				7E1C4246217257D600805EFE /* fire.png */,
 				7E1C42442172482C00805EFE /* Icon-App-60x60@3x.png */,
 				7E1C42422172482600805EFE /* Icon-App-29x29@3x.png */,
 				7E1C42402171F38500805EFE /* money icon.png */,
@@ -206,6 +209,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E1C42452172482C00805EFE /* Icon-App-60x60@3x.png in Resources */,
+				7E1C4247217257D600805EFE /* fire.png in Resources */,
 				7E1C42412171F38500805EFE /* money icon.png in Resources */,
 				7E1C423B2171D13200805EFE /* Icon.png in Resources */,
 				7E644A6521719B71009810FF /* art.scnassets in Resources */,
