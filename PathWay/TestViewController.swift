@@ -20,16 +20,37 @@ class TestViewController: UIViewController {
     var markButton = UIButton()
     var pathToClosest = UITextField()
     
+    var timer: Timer!
+    
+    let pyramidGeometry = SCNPyramid(width: 0.01, height: 0.04, length: 0.01)
+    lazy var pyramidNode = SCNNode(geometry: self.pyramidGeometry)
+    
     var marked = CLLocation(latitude: 32.8855781716564785, longitude: -117.23935240809809)
     var lastLocation = CLLocation(latitude: 32.8855781716564785, longitude: -117.23935240809809)
     
-    let waypointTypes = ["Bathroom", "Exit", "Health Office", "Fire Alarm", "Stairs", "Elevators", "Ramps"]
+    let waypointTypes = ["Bathroom", "Exit", "Health Office", "Fire Alarm", "Stairs", "Elevator", "Ramp", "Fire Extinguisher"]
     
     var sceneLocationView = SceneLocationView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        WaypointStore.shared.getWaypointsForLocation(coordinate: CLLocationCoordinate2D(latitude: 32.8855781716564785, longitude: -117.23935240809809), altitude: 123.15) { (waypoints) in
+            for waypoint in waypoints {
+                let coordinate = CLLocationCoordinate2D(latitude: waypoint.latitude, longitude: waypoint.longitude)
+                
+                print(coordinate)
+                let location = CLLocation(coordinate: coordinate, altitude: 123.15)
+                guard let image = UIImage(named: waypoint.name) else {
+                    continue
+                }
+                
+                let annotationNode = LocationAnnotationNode(location: location, image: image)
+                self.sceneLocationView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
+            }
+        }
 
+        self.timer = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(update), userInfo: nil, repeats: true)
         sceneLocationView.run()
         view.addSubview(sceneLocationView)
         
@@ -52,7 +73,15 @@ class TestViewController: UIViewController {
         node.geometry = box
         node.geometry?.materials = [material]
         node.position = SCNVector3(0, 0, 1)
-        //sceneLocationView.scene.rootNode.addChildNode(node)
+        sceneLocationView.scene.rootNode.addChildNode(node)
+        
+        // Make Pyramid
+        let materialPyr = SCNMaterial()
+        materialPyr.diffuse.contents = UIImage.init(named: "gradient")
+        pyramidGeometry.materials = [materialPyr]
+        
+        self.pyramidNode.position = SCNVector3Make(0, -0.1, -0.2)
+        self.sceneLocationView.pointOfView?.addChildNode(pyramidNode)
         
         self.markButton.setTitle("+", for: .normal)
         self.markButton.setTitleColor(.black, for: .normal)
@@ -72,6 +101,8 @@ class TestViewController: UIViewController {
         self.view.addSubview(self.locationLabel)
         self.view.addSubview(self.topView)
         self.setupConstraints()
+        
+        //pointTo()
     }
     
     override func viewDidLayoutSubviews() {
@@ -100,82 +131,63 @@ class TestViewController: UIViewController {
     }
 
     @objc func mark() {
+        self.lastLocation = self.sceneLocationView.currentLocation()!
         self.marked = self.sceneLocationView.currentLocation()!
+        
         DispatchQueue.main.async {
-            let box = SCNBox(width: 0.2, height: 0.2, length: 0.2, chamferRadius: 0)
+        
+            let coordinate = CLLocationCoordinate2D(latitude: self.marked.coordinate.latitude, longitude: self.marked.coordinate.longitude)
             
-            let material = SCNMaterial()
-            
-            //This is not working
-            material.diffuse.contents = UIImage(named: "Icon-App-60x60")
-            
-            let node = SCNNode()
-            node.geometry = box
-            node.geometry?.materials = [material]
-            
-            /*
-             
-             let referenceNode = self.sceneLocationView.pointOfView!
-             let position = SCNVector3(x: 0, y: 0.75, z: 0)
-             let referenceNodeTransform = matrix_float4x4(referenceNode.transform)
-             
-             // Setup a translation matrix with the desired position
-             var translationMatrix = matrix_identity_float4x4
-             translationMatrix.columns.3.x = position.x
-             translationMatrix.columns.3.y = position.y
-             translationMatrix.columns.3.z = position.z
-             
-             // Combine the configured translation matrix with the referenceNode's transform to get the desired position AND orientation
-             let updatedTransform = matrix_multiply(referenceNodeTransform, translationMatrix)
-             print(updatedTransform)
-             node.transform = SCNMatrix4(updatedTransform)
-             self.sceneLocationView.scene.rootNode.addChildNode(node)
-             
-             let frame = self.sceneLocationView.session.currentFrame!
-             let currentTransform = frame.camera.transform
-             node.transform = SCNMatrix4(matrix_multiply(currentTransform, translation))
-             self.sceneLocationView.scene.rootNode.addChildNode(node) */
-            let coordinate = self.marked.coordinate
             print(coordinate)
-            let location = CLLocation(coordinate: coordinate, altitude: 124)
+            let location = CLLocation(coordinate: coordinate, altitude: 123.15)
             let image = UIImage(named: "Icon-App-60x60")!
+            
             let annotationNode = LocationAnnotationNode(location: location, image: image)
             self.sceneLocationView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
         }
         
         self.locationLabel.text = "marked"
-        
-        let currentLocation = self.sceneLocationView.currentLocation()
-        let metersAway = lastLocation.distance(from: marked)
-        print("\(lastLocation.coordinate)")
-        self.locationLabel.text = "lat: \(currentLocation?.coordinate.latitude)\n long: \(currentLocation?.coordinate.longitude)\n alt: \(currentLocation?.altitude)\n dist: \(metersAway)"
     }
 
     @objc func addPressed() {
+        self.lastLocation = self.sceneLocationView.currentLocation()!
         let alert = UIAlertController(title: "Add New Waypoint", message: "Type a name for this new waypoint", preferredStyle: UIAlertController.Style.alert)
         let action = UIAlertAction(title: "Adding new Waypoint", style: .default) { (alertAction) in
             let textField = alert.textFields![0] as UITextField
-            print(textField.text)
-            // TODO: Upload
+            DispatchQueue.main.async {
+                
+                let coordinate = CLLocationCoordinate2D(latitude: self.lastLocation.coordinate.latitude, longitude: self.lastLocation.coordinate.longitude)
+                print(coordinate)
+                let location = CLLocation(coordinate: coordinate, altitude: 123.15)
+                let image = UIImage(named: textField.text!)!
+                let annotationNode = LocationAnnotationNode(location: location, image: image)
+            self.sceneLocationView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
+                WaypointStore.shared.createWaypoint(name: textField.text ?? "", coordinate: coordinate, altitude: location.altitude, callback: { (waypoint) in
+                    print("got it!")
+                })
+            }
         }
         alert.addTextField { (textField) in
-            textField.placeholder = "Enter your name"
+            textField.placeholder = "Enter a name"
         }
         alert.addAction(action)
         self.present(alert, animated:true, completion: nil)
     }
 
-    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        print("added")
-        return
+    @objc func update() {
+        self.lastLocation = self.sceneLocationView.currentLocation()!
+        let heading = CGFloat((self.sceneLocationView.locationManager.heading?.degreesToRadians)!)
+        let currentLocation = self.sceneLocationView.currentLocation()
+        let metersAway = lastLocation.distance(from: marked)
+        
+        let radians = self.lastLocation.bearingToLocationRadian(self.marked)
+        self.locationLabel.text = "lat: \(currentLocation?.coordinate.latitude)\n long: \(currentLocation?.coordinate.longitude)\n alt: \(currentLocation?.altitude)\n dist: \(metersAway)"
+        self.rotate(x: self.pyramidNode, rotateTo: -(radians - heading))
     }
-    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        print(anchor)
-        return nil
-    }
-
-    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-        print("udpdate")
+    
+    func rotate(x: SCNNode, rotateTo: CGFloat) {
+        let rot = SCNAction.rotateTo(x: 0, y: 0, z: rotateTo, duration: 0.3, usesShortestUnitArc: true)
+        x.runAction(rot)
     }
 }
 
