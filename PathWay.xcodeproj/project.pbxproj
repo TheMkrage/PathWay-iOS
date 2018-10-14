@@ -23,6 +23,8 @@
 		7EF208CF2172DFA100C13BB1 /* ViewController 19-18-56-039.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF208CE2172DFA100C13BB1 /* ViewController 19-18-56-039.swift */; };
 		7EF208D12172E35C00C13BB1 /* Raleway-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7EF208D02172E32A00C13BB1 /* Raleway-Regular.otf */; };
 		7EF208D32172F4BB00C13BB1 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EF208D22172F4BB00C13BB1 /* Icon.png */; };
+		7EF208D62173032400C13BB1 /* WaypointPickerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF208D52173032400C13BB1 /* WaypointPickerDataSource.swift */; };
+		7EF208D82173192200C13BB1 /* TextViewControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF208D72173192200C13BB1 /* TextViewControllerHelper.swift */; };
 		92297F4AFA708735E301FE50 /* Pods_PathWay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06EB527C81886C74E2DE73BF /* Pods_PathWay.framework */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +50,8 @@
 		7EF208CE2172DFA100C13BB1 /* ViewController 19-18-56-039.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController 19-18-56-039.swift"; sourceTree = "<group>"; };
 		7EF208D02172E32A00C13BB1 /* Raleway-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-Regular.otf"; sourceTree = "<group>"; };
 		7EF208D22172F4BB00C13BB1 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		7EF208D52173032400C13BB1 /* WaypointPickerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaypointPickerDataSource.swift; sourceTree = "<group>"; };
+		7EF208D72173192200C13BB1 /* TextViewControllerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewControllerHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +121,8 @@
 				7E1C426C2172B78F00805EFE /* Extensions.swift */,
 				7EF208D22172F4BB00C13BB1 /* Icon.png */,
 				7EF208D02172E32A00C13BB1 /* Raleway-Regular.otf */,
+				7EF208D52173032400C13BB1 /* WaypointPickerDataSource.swift */,
+				7EF208D72173192200C13BB1 /* TextViewControllerHelper.swift */,
 			);
 			path = PathWay;
 			sourceTree = "<group>";
@@ -271,7 +277,9 @@
 				7EF208CF2172DFA100C13BB1 /* ViewController 19-18-56-039.swift in Sources */,
 				7E644A7F2171AD77009810FF /* Waypoint.swift in Sources */,
 				7E1C426D2172B78F00805EFE /* Extensions.swift in Sources */,
+				7EF208D82173192200C13BB1 /* TextViewControllerHelper.swift in Sources */,
 				7E644A7B2171ACEA009810FF /* WaypointStore.swift in Sources */,
+				7EF208D62173032400C13BB1 /* WaypointPickerDataSource.swift in Sources */,
 				7E644A6321719B71009810FF /* AppDelegate.swift in Sources */,
 				7E644A832171AE82009810FF /* Backend.swift in Sources */,
 			);

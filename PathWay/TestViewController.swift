@@ -17,12 +17,11 @@ class TestViewController: UIViewController {
     let locationLabel = UILabel()
     var topView = UIView()
     var addButton = UIButton()
-    var markButton = UIButton()
     var pathToClosest = UITextField()
     
     var timer: Timer!
     
-    let pyramidGeometry = SCNPyramid(width: 0.01, height: 0.04, length: 0.01)
+    let pyramidGeometry = SCNPyramid(width: 0.01, height: 0.04, length: 0.015)
     lazy var pyramidNode = SCNNode(geometry: self.pyramidGeometry)
     
     var marked = CLLocation(latitude: 32.8855781716564785, longitude: -117.23935240809809)
@@ -33,42 +32,28 @@ class TestViewController: UIViewController {
     
     var sceneLocationView = SceneLocationView()
     
+    // datadelegate for making new waypoint
+    var dataDelegate: WaypointPickerDataSource?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Raleway-Regular", size: 20)!]
+        self.title = "PATHWAY"
         
-        WaypointStore.shared.getWaypointsForLocation(coordinate: CLLocationCoordinate2D(latitude: 32.8855781716564785, longitude: -117.23935240809809), altitude: 123.15) { (waypoints) in
-            self.waypoints = waypoints
-            DispatchQueue.main.async {
-                for waypoint in waypoints {
-                    let coordinate = CLLocationCoordinate2D(latitude: waypoint.latitude, longitude: waypoint.longitude)
-                    
-                    print(coordinate)
-                    let location = CLLocation(coordinate: coordinate, altitude: 123.15)
-                    guard let image = UIImage(named: waypoint.name) else {
-                        continue
-                    }
-                    
-                    let annotationNode = LocationAnnotationNode(location: location, image: image)
-                    self.sceneLocationView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
-                }
-            }
-        }
+        // Refresh Button
+        let refresh = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        refresh.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        refresh.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        refresh.setBackgroundImage(UIImage(named: "refresh"), for: .normal)
+        refresh.addTarget(self, action: #selector(refreshWaypoints), for: .touchUpInside)
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: refresh)
+        
+        self.refreshWaypoints()
 
         self.timer = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(update), userInfo: nil, repeats: true)
         sceneLocationView.run()
         view.addSubview(sceneLocationView)
-        
-        let box = SCNBox(width: 0.2, height: 0.2, length: 0.2, chamferRadius: 0)
-        
-        let material = SCNMaterial()
-        
-        material.diffuse.contents = UIImage(named: "Icon.png")
-        
-        let node = SCNNode()
-        node.geometry = box
-        node.geometry?.materials = [material]
-        node.position = SCNVector3(0, 0, 1)
-        sceneLocationView.scene.rootNode.addChildNode(node)
         
         // Make Pyramid
         let materialPyr = SCNMaterial()
@@ -78,11 +63,8 @@ class TestViewController: UIViewController {
         self.pyramidNode.position = SCNVector3Make(0, -0.1, -0.2)
         self.sceneLocationView.pointOfView?.addChildNode(pyramidNode)
         
-        self.markButton.setTitle("+", for: .normal)
-        self.markButton.setTitleColor(.black, for: .normal)
-        self.markButton.addTarget(self, action: #selector(mark), for: .touchUpInside)
-        
         self.addButton.setTitle("+", for: .normal)
+        self.addButton.titleLabel?.font = UIFont.systemFont(ofSize: 36.0)
         self.addButton.setTitleColor(.black, for: .normal)
         self.addButton.addTarget(self, action: #selector(addPressed), for: .touchUpInside)
         
@@ -94,12 +76,12 @@ class TestViewController: UIViewController {
         inputView.delegate = self
         inputView.dataSource = self
         self.pathToClosest.inputView = inputView
-            
+        
+        //self.topView.backgroundColor = UIColor.init(red: 178/255, green: 223/255, blue: 255/255, alpha: 0.8)
         self.topView.backgroundColor = UIColor.white.withAlphaComponent(0.7)
         
         self.topView.addSubview(self.pathToClosest)
         self.topView.addSubview(self.addButton)
-        self.topView.addSubview(self.markButton)
         
         self.locationLabel.textColor = .white
         self.locationLabel.numberOfLines = 0
@@ -126,40 +108,14 @@ class TestViewController: UIViewController {
         self.topView.trailingAnchor == self.view.trailingAnchor
         self.topView.heightAnchor == 60
         
-        self.markButton.trailingAnchor == self.topView.trailingAnchor - 20
-        self.markButton.centerYAnchor == self.topView.centerYAnchor
-        self.markButton.widthAnchor == 20
-        
-        self.addButton.trailingAnchor == self.topView.trailingAnchor - 80
+        self.addButton.trailingAnchor == self.topView.trailingAnchor - 20
         self.addButton.centerYAnchor == self.topView.centerYAnchor
         self.addButton.widthAnchor == 20
         
         self.pathToClosest.topAnchor == self.topView.topAnchor
         self.pathToClosest.leadingAnchor == self.topView.leadingAnchor + 20
         self.pathToClosest.bottomAnchor == self.topView.bottomAnchor
-        self.pathToClosest.trailingAnchor == self.addButton.leadingAnchor
-    }
-
-    @objc func mark() {
-        guard let currentLocation = self.sceneLocationView.currentLocation() else {
-            return
-        }
-        self.lastLocation = currentLocation
-        self.marked = currentLocation
-        
-        DispatchQueue.main.async {
-        
-            let coordinate = CLLocationCoordinate2D(latitude: self.marked.coordinate.latitude, longitude: self.marked.coordinate.longitude)
-            
-            print(coordinate)
-            let location = CLLocation(coordinate: coordinate, altitude: 123.15)
-            let image = UIImage(named: "Icon-App-60x60")!
-            
-            let annotationNode = LocationAnnotationNode(location: location, image: image)
-            self.sceneLocationView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
-        }
-        
-        self.locationLabel.text = "marked"
+        self.pathToClosest.trailingAnchor == self.addButton.leadingAnchor - 20
     }
 
     @objc func addPressed() {
@@ -178,8 +134,10 @@ class TestViewController: UIViewController {
                 guard let image = UIImage(named: textField.text ?? "") else {
                     return
                 }
-                let annotationNode = LocationAnnotationNode(location: location, image: image)
-            self.sceneLocationView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
+                let annotationNode = LocationNode.init(location: location)
+                let node = self.getBox(image: image)
+                annotationNode.addChildNode(node)
+                self.sceneLocationView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
                 WaypointStore.shared.createWaypoint(name: textField.text ?? "", coordinate: coordinate, altitude: location.altitude, callback: { (waypoint) in
                     self.waypoints.append(waypoint)
                 })
@@ -187,6 +145,11 @@ class TestViewController: UIViewController {
         }
         alert.addTextField { (textField) in
             textField.placeholder = "Enter a name"
+            let inputView = UIPickerView()
+            self.dataDelegate = WaypointPickerDataSource(waypointTypes: self.waypointTypes, textField: textField)
+            inputView.delegate = self.dataDelegate
+            inputView.dataSource = self.dataDelegate
+            textField.inputView = inputView
         }
         alert.addAction(action)
         self.present(alert, animated:true, completion: nil)
@@ -213,6 +176,32 @@ class TestViewController: UIViewController {
         let rot = SCNAction.rotateTo(x: 0, y: 0, z: rotateTo, duration: 0.3, usesShortestUnitArc: true)
         x.runAction(rot)
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    @objc func refreshWaypoints() {
+        WaypointStore.shared.getWaypointsForLocation(coordinate: CLLocationCoordinate2D(latitude: 32.8855781716564785, longitude: -117.23935240809809), altitude: 123.15) { (waypoints) in
+            self.waypoints = waypoints
+            DispatchQueue.main.async {
+                for waypoint in waypoints {
+                    let coordinate = CLLocationCoordinate2D(latitude: waypoint.latitude, longitude: waypoint.longitude)
+                    
+                    print(coordinate)
+                    let location = CLLocation(coordinate: coordinate, altitude: 123.15)
+                    guard let image = UIImage(named: waypoint.name) else {
+                        continue
+                    }
+
+                    let annotationNode = LocationNode.init(location: location)
+                    let node = self.getBox(image: image)
+                    annotationNode.addChildNode(node)
+                    self.sceneLocationView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
+                }
+            }
+        }
+    }
 }
 
 extension TestViewController: UITextFieldDelegate {
@@ -228,17 +217,30 @@ extension TestViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return self.waypointTypes.count
+        return self.waypointTypes.filter({ (string) -> Bool in
+            return self.waypoints.contains(where: { (waypoint) -> Bool in
+                return waypoint.name == string
+            })
+        }).count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return self.waypointTypes[row]
+        return self.waypointTypes.filter({ (string) -> Bool in
+            return self.waypoints.contains(where: { (waypoint) -> Bool in
+                return waypoint.name == string
+            })
+        })[row]
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        self.pathToClosest.text = "Showing Path to Nearest \(self.waypointTypes[row])"
+        let name = self.waypointTypes.filter({ (string) -> Bool in
+            return self.waypoints.contains(where: { (waypoint) -> Bool in
+                return waypoint.name == string
+            })
+        })[row]
+        self.pathToClosest.text = "Pathing Nearest \(name)"
         let viableWaypoints = self.waypoints.filter { (waypoint) -> Bool in
-            return waypoint.name == self.waypointTypes[row]
+            return waypoint.name == name
         }
         guard let first = viableWaypoints.first else {
             return
