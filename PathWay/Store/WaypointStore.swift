@@ -41,8 +41,8 @@ class WaypointStore: NSObject {
         dictionary["latitude"] = coordinate.latitude
         dictionary["longitude"] = coordinate.longitude
         
-        print("\(Backend.baseURL)/add.")
-        Alamofire.request("\(Backend.baseURL)/add/", method: .post, parameters: dictionary, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
+        print("\(Backend.baseURL)/add/")
+        Alamofire.request("\(Backend.baseURL)/add/", method: .post, parameters: dictionary, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
             
             let jsonDecoder = JSONDecoder()
             guard let data = response.data else {

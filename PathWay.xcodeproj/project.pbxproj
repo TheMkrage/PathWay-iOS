@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7E1C423B2171D13200805EFE /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E1C423A2171D13200805EFE /* Icon.png */; };
 		7E1C423F2171F0CD00805EFE /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1C423E2171F0CD00805EFE /* TestViewController.swift */; };
 		7E1C42412171F38500805EFE /* money icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E1C42402171F38500805EFE /* money icon.png */; };
 		7E1C42432172482600805EFE /* Icon-App-29x29@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E1C42422172482600805EFE /* Icon-App-29x29@3x.png */; };
@@ -15,13 +14,15 @@
 		7E1C4247217257D600805EFE /* fire.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E1C4246217257D600805EFE /* fire.png */; };
 		7E1C426D2172B78F00805EFE /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1C426C2172B78F00805EFE /* Extensions.swift */; };
 		7E644A6321719B71009810FF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E644A6221719B71009810FF /* AppDelegate.swift */; };
-		7E644A6721719B71009810FF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E644A6621719B71009810FF /* ViewController.swift */; };
 		7E644A6A21719B71009810FF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E644A6821719B71009810FF /* Main.storyboard */; };
 		7E644A6C21719B72009810FF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E644A6B21719B72009810FF /* Assets.xcassets */; };
 		7E644A6F21719B72009810FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E644A6D21719B72009810FF /* LaunchScreen.storyboard */; };
 		7E644A7B2171ACEA009810FF /* WaypointStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E644A7A2171ACEA009810FF /* WaypointStore.swift */; };
 		7E644A7F2171AD77009810FF /* Waypoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E644A7E2171AD77009810FF /* Waypoint.swift */; };
 		7E644A832171AE82009810FF /* Backend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E644A822171AE82009810FF /* Backend.swift */; };
+		7EF208CF2172DFA100C13BB1 /* ViewController 19-18-56-039.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF208CE2172DFA100C13BB1 /* ViewController 19-18-56-039.swift */; };
+		7EF208D12172E35C00C13BB1 /* Raleway-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7EF208D02172E32A00C13BB1 /* Raleway-Regular.otf */; };
+		7EF208D32172F4BB00C13BB1 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7EF208D22172F4BB00C13BB1 /* Icon.png */; };
 		92297F4AFA708735E301FE50 /* Pods_PathWay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06EB527C81886C74E2DE73BF /* Pods_PathWay.framework */; };
 /* End PBXBuildFile section */
 
@@ -29,7 +30,6 @@
 		06EB527C81886C74E2DE73BF /* Pods_PathWay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PathWay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AF1219CDBEA277E8094329E /* Pods-PathWay.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PathWay.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PathWay/Pods-PathWay.debug.xcconfig"; sourceTree = "<group>"; };
 		52A66432BFDD7F4156208CDF /* Pods-PathWay.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PathWay.release.xcconfig"; path = "Pods/Target Support Files/Pods-PathWay/Pods-PathWay.release.xcconfig"; sourceTree = "<group>"; };
-		7E1C423A2171D13200805EFE /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		7E1C423E2171F0CD00805EFE /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		7E1C42402171F38500805EFE /* money icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "money icon.png"; sourceTree = "<group>"; };
 		7E1C42422172482600805EFE /* Icon-App-29x29@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-App-29x29@3x.png"; sourceTree = "<group>"; };
@@ -38,7 +38,6 @@
 		7E1C426C2172B78F00805EFE /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		7E644A5F21719B71009810FF /* PathWay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PathWay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E644A6221719B71009810FF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		7E644A6621719B71009810FF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7E644A6921719B71009810FF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7E644A6B21719B72009810FF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7E644A6E21719B72009810FF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -46,6 +45,9 @@
 		7E644A7A2171ACEA009810FF /* WaypointStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaypointStore.swift; sourceTree = "<group>"; };
 		7E644A7E2171AD77009810FF /* Waypoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Waypoint.swift; sourceTree = "<group>"; };
 		7E644A822171AE82009810FF /* Backend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend.swift; sourceTree = "<group>"; };
+		7EF208CE2172DFA100C13BB1 /* ViewController 19-18-56-039.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController 19-18-56-039.swift"; sourceTree = "<group>"; };
+		7EF208D02172E32A00C13BB1 /* Raleway-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-Regular.otf"; sourceTree = "<group>"; };
+		7EF208D22172F4BB00C13BB1 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,18 +104,19 @@
 				7E644A802171AD7B009810FF /* ARKit */,
 				7E644A7D2171AD6E009810FF /* Model */,
 				7E644A6221719B71009810FF /* AppDelegate.swift */,
-				7E644A6621719B71009810FF /* ViewController.swift */,
 				7E1C423E2171F0CD00805EFE /* TestViewController.swift */,
 				7E644A6821719B71009810FF /* Main.storyboard */,
 				7E644A6B21719B72009810FF /* Assets.xcassets */,
 				7E1C4246217257D600805EFE /* fire.png */,
 				7E1C42442172482C00805EFE /* Icon-App-60x60@3x.png */,
 				7E1C42422172482600805EFE /* Icon-App-29x29@3x.png */,
+				7EF208CE2172DFA100C13BB1 /* ViewController 19-18-56-039.swift */,
 				7E1C42402171F38500805EFE /* money icon.png */,
-				7E1C423A2171D13200805EFE /* Icon.png */,
 				7E644A6D21719B72009810FF /* LaunchScreen.storyboard */,
 				7E644A7021719B72009810FF /* Info.plist */,
 				7E1C426C2172B78F00805EFE /* Extensions.swift */,
+				7EF208D22172F4BB00C13BB1 /* Icon.png */,
+				7EF208D02172E32A00C13BB1 /* Raleway-Regular.otf */,
 			);
 			path = PathWay;
 			sourceTree = "<group>";
@@ -202,13 +205,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7EF208D32172F4BB00C13BB1 /* Icon.png in Resources */,
 				7E1C42452172482C00805EFE /* Icon-App-60x60@3x.png in Resources */,
 				7E1C4247217257D600805EFE /* fire.png in Resources */,
 				7E1C42412171F38500805EFE /* money icon.png in Resources */,
-				7E1C423B2171D13200805EFE /* Icon.png in Resources */,
 				7E644A6F21719B72009810FF /* LaunchScreen.storyboard in Resources */,
 				7E1C42432172482600805EFE /* Icon-App-29x29@3x.png in Resources */,
 				7E644A6C21719B72009810FF /* Assets.xcassets in Resources */,
+				7EF208D12172E35C00C13BB1 /* Raleway-Regular.otf in Resources */,
 				7E644A6A21719B71009810FF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -264,9 +268,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E1C423F2171F0CD00805EFE /* TestViewController.swift in Sources */,
+				7EF208CF2172DFA100C13BB1 /* ViewController 19-18-56-039.swift in Sources */,
 				7E644A7F2171AD77009810FF /* Waypoint.swift in Sources */,
 				7E1C426D2172B78F00805EFE /* Extensions.swift in Sources */,
-				7E644A6721719B71009810FF /* ViewController.swift in Sources */,
 				7E644A7B2171ACEA009810FF /* WaypointStore.swift in Sources */,
 				7E644A6321719B71009810FF /* AppDelegate.swift in Sources */,
 				7E644A832171AE82009810FF /* Backend.swift in Sources */,
